@@ -53,3 +53,20 @@ heap5 = MinHeap([-5, -10, 3, -20, 0])
 print("\n Heap me Numra Negativ:", heap5)
 print("Minimum:", heap5.peek())
 print("Valid:", heap5.validate())
+
+print("\n-- Testimi per Empty Heap --")
+
+empty_heap = MinHeap()
+
+print("Eshte Empty:", empty_heap.is_empty())
+print("Size:", empty_heap.size())
+
+try:
+    empty_heap.peek()
+except IndexError as error:
+    print("Gabim gjate peek-it:", error)
+
+try:
+    empty_heap.extract_min()
+except IndexError as error:
+    print("Gabim gjate extract-it:", error)
