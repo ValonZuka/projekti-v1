@@ -39,7 +39,7 @@ class PriorityQueue(Generic[T]):
         return task
 
     def is_empty(self) -> bool:
-        return self._heap.is_empty
+        return self._heap.is_empty()
 
     def size(self) -> int :
         return self._heap.size()
