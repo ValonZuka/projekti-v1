@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
 
-import pytest
 
 from src.priority_queue import PriorityQueue
 

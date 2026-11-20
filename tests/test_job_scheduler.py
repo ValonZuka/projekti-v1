@@ -68,3 +68,11 @@ def test_invalid_job_name():
 
     with pytest.raises(TypeError):
         scheduler.add_job("Invalid Priority", 1.5)
+
+
+
+def test_invalid_priority():
+    scheduler = JobScheduler()
+
+    with pytest.raises(TypeError):
+        scheduler.add_job("Invalid Task", 1.5)
