@@ -1,7 +1,6 @@
 import pytest
 
-from src.job_scheduler import JobScheduler
-
+from src.job_scheduler_anulim import JobScheduler
 
 def test_add_job():
     scheduler = JobScheduler()
@@ -76,3 +75,34 @@ def test_invalid_priority():
 
     with pytest.raises(TypeError):
         scheduler.add_job("Invalid Task", 1.5)
+
+        
+
+def test_cancel_job():
+    scheduler = JobScheduler()
+
+    job1 = scheduler.add_job("Backup", 3)
+    scheduler.add_job("Security Alert", 1)
+
+    assert scheduler.cancel_job(job1.job_id) is True
+
+    processed = scheduler.process_next()
+
+    assert processed.name == "Security Alert"
+    assert scheduler.process_next() is None
+
+
+def test_cancel_nonexistent_job():
+    scheduler = JobScheduler()
+
+    assert scheduler.cancel_job(999) is False
+
+
+def test_cancel_already_processed_job():
+    scheduler = JobScheduler()
+
+    job = scheduler.add_job("Report", 2)
+
+    scheduler.process_next()
+
+    assert scheduler.cancel_job(job.job_id) is False
