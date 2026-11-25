@@ -53,9 +53,7 @@ class JobScheduler:
         self._pending_count += 1
 
         return job
-        if not isinstance(job_id, int) or isinstance(job_id, bool):
-            return False
-
+       
     def cancel_job(self, job_id: int) -> bool:
         """Anulon nje detyre qe ende pret ne radhe."""
 
