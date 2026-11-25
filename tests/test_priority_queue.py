@@ -58,3 +58,35 @@ def test_empty_queue():
 
         with pytest.raises(IndexError):
             queue.peek()
+
+def test_negative_priority():
+       queue = PriorityQueue()
+
+       queue.enqueue("Normale", 2)
+       queue.enqueue("Urgjente", -2)
+       queue.enqueue("I Ulet", 20)
+
+       assert queue.dequeue() == "Urgjente"
+       assert queue.dequeue() == "Normale"
+       
+       assert queue.dequeue() == "I Ulet"
+def test_invalid_priority_float():
+       queue = PriorityQueue()
+
+       with pytest.raises(TypeError):
+              queue.enqueue("JoValide", 1.5)
+
+def test_invalid_priority_boolean():
+       queue = PriorityQueue()
+
+       with pytest.raises(TypeError):
+              queue.enqueue("JoValide", True)
+def test_peek_does_not_remove():
+       queue = PriorityQueue()
+
+       queue.enqueue("Detyra a", 1)
+
+       assert queue.peek() == "Detyra a"
+       assert queue.size() == 1
+
+       assert not queue.is_empty()

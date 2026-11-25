@@ -1,6 +1,6 @@
 import pytest
 
-from src.job_scheduler_anulim import JobScheduler
+from src.job_scheduler import JobScheduler
 
 def test_add_job():
     scheduler = JobScheduler()
@@ -106,3 +106,70 @@ def test_cancel_already_processed_job():
     scheduler.process_next()
 
     assert scheduler.cancel_job(job.job_id) is False
+
+def test_cancel_same_job_twice():
+    scheduler = JobScheduler()
+
+    job = scheduler.add_job("Backup", 2)
+
+    assert scheduler.cancel_job(job.job_id) is True
+    assert scheduler.cancel_job(job.job_id) is False
+    assert scheduler.pending_jobs() == 0
+    assert scheduler.is_empty()
+
+
+def test_cancel_multiple_jobs():
+    scheduler = JobScheduler()
+
+    job1 = scheduler.add_job("Backup", 3)
+    job2 = scheduler.add_job("Report", 2)
+    job3 = scheduler.add_job("Security", 1)
+
+    assert scheduler.cancel_job(job1.job_id) is True
+    assert scheduler.cancel_job(job2.job_id) is True
+
+    assert scheduler.pending_jobs() == 1
+
+    processed = scheduler.process_next()
+
+    assert processed.name == "Security"
+    assert scheduler.pending_jobs() == 0
+    assert scheduler.is_empty()
+
+
+def test_process_after_multiple_cancellations():
+    scheduler = JobScheduler()
+
+    job1 = scheduler.add_job("Task A", 1)
+    job2 = scheduler.add_job("Task B", 2)
+    job3 = scheduler.add_job("Task C", 3)
+
+    scheduler.cancel_job(job1.job_id)
+    scheduler.cancel_job(job2.job_id)
+
+    processed = scheduler.process_next()
+
+    assert processed.name == "Task C"
+    assert scheduler.process_next() is None
+    assert scheduler.pending_jobs() == 0
+
+
+def test_cancel_invalid_job_id():
+    scheduler = JobScheduler()
+    scheduler.add_job("Backup", 1)
+
+    assert scheduler.cancel_job(True) is False
+    assert scheduler.cancel_job("1") is False
+    assert scheduler.cancel_job(None) is False
+
+
+def test_execution_history_returns_copy():
+    scheduler = JobScheduler()
+
+    scheduler.add_job("Backup", 1)
+    scheduler.process_next()
+
+    history = scheduler.execution_history()
+    history.clear()
+
+    assert len(scheduler.execution_history()) == 1

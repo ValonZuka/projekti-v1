@@ -15,9 +15,14 @@ class PriorityQueue(Generic[T]):
         self._heap: MinHeap[tuple[int, int, T]] = MinHeap()
         self._sequence = 0
 
-    def enqueue(self, task: T, priority: int ) -> None:
+    def enqueue(self, task: T, priority: int) -> None:
         """Shton nje element/detyre me prioritet te caktuar ne rradhe."""
-
+        
+        
+        if not isinstance(priority, int) or isinstance(priority, bool):
+            raise TypeError("Prioriteti duhet te jete numer i plote.")
+        
+        
         entry = (priority, self._sequence, task)
 
         self._heap.insert(entry)
@@ -45,4 +50,4 @@ class PriorityQueue(Generic[T]):
         return self._heap.size()
 
     def __len__(self) ->int:
-        return len (self._heap)
+        return len(self._heap)
