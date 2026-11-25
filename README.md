@@ -1,6 +1,6 @@
-# NEXUS – Sistem Per Planifikimin e Detyrave Bazuar ne Prioritetet e tyre 
+# NEXUS <–> Sistem Per Planifikimin e Detyrave Bazuar ne Prioritetet e tyre 
 
-# NEXUS - Priority-Based Job Scheduling System
+# NEXUS -- Priority-Based Job Scheduling System
 
 ## Përshkrimi i projektit
 
